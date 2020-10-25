@@ -1,7 +1,7 @@
 ---
 title: "Aides Drug"
-author: "Put your name here!"
-date: "put the date here"
+author: "Brandon Reyes!"
+date: "Fall 2020"
 output: html_document
 ---
 
@@ -9,6 +9,8 @@ output: html_document
 require(tidyverse)
 require(tigerstats)
 triUmp <-read.csv(file="triUmpsal.csv",header=TRUE)
+mydata<-select(triUmp, c(2:6))
+mydataF<-filter(mydata,gender==("F"))
 ```
 
 # Introduction
@@ -30,16 +32,35 @@ A new  preventative aides drug (triUmpsal) is under test in clinical trials. Con
 ### Graphical Descriptive Results
 
 <!--Graphical results here.  Make sure to show your code.  Provide appropriate labels for axes, giving units if possible, and provide a good title for the graph, too.  Use the graphical results to describe the patterns if any that exist in the data as focused toward the research question. Bottom line is to explain the features of the graph that are relevant to conforming or departing to what is expected by your null hypothesis !-->
+```{r}
+barchartGC(~infected + treatment,data=mydataF)
+barchartGC(~infected + treatment,data=mydataF, type="percent")
+
+```
+ 
+  According to this chart, we can see that so far no, this drug is not effective to prevent aids in women, instead of preventing aids in women, it is making the women contract aids even more versus women who are just taking placebos.  
 
 ### Numerical Descriptive Results
 
 <!--Numerical results go here. Use the numerical results to describe the patterns if any that exist in the data as focused toward the research question!-->
+```{r}
+table1 <- xtabs(~infected + treatment, data=mydataF)
+rowPerc(table1)
+colPerc(table1)
+```
+Women who have taken the treatment and have been infected with aids is nearly 60 out of 100 when all have been rounded. This gives us a ratio of 3:2 when simplified.  
 
 ## Inferential Results
 
 <!--State hypothesis clearly.  Make sure your discussion of the inferential test covers all the aspects that the test output produces, such as test statistic, p-value etc.  Make a decision about the null hypothesis, explain the assumptions on which the selected test/procedure was based, and why the chosen procedure satisfys the assumptions and is appropriate to answer the research question!-->
-
+```{r}
+chisq.test(table1)
+chisqtestGC(table1)
+fisher.test(table1)
+```
+The null hypothesis is false because there is clearly a side effect of some sort that causes the women being treated with the drug to get infected versus women who only take placebos. Our first inferential test gives us a p-value of 0.00987656 and the final inferential test gives us a p-value of 0.00896596. Both p-value tell me that overall, the chances of receiving these same exact results is unlikely. The confidence interval tells me that overall, the chances of women getting aids when taking the drug is 1 1/2 times more likely that women who have not.
 
 # Discussion and Conclusion
 
 <!--Discussion and conclusion here.  If you found a relationship be sure to consider whether the relationship occurs because one of the variavbles causes the other, or whether they perhasps are related for some other reason.  Watch the chapter 6 videos from the GeorgeTown videos collection.!-->
+Based on our results, I believe that there is a relationship between both groups of women who are in this trial. My reasoning is that, both groups still have gotten aids regardless and the 60% of women with aids took the drug while 40% of them did not take the drug but instead took a placebo. Overall it shows that either way, there is a relatively high chance that you will get infected with aids regardless whether you take the placebo or the drug. Another thing to add to my conclusion is that I believe the majority of both groups of women did not take any other preventative actions besides taking the preventative drug which has lead to a significant amount of people infected. So because there is no other preventative actions and just reliance on the drug itself, the failure rate is high.
